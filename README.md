@@ -17,7 +17,7 @@ Chrome: https://chrome.google.com/webstore/detail/sqlite-reader/iefihcnlpcaplfbk
 Edge:      
 Firefox: https://addons.mozilla.org/en-US/firefox/addon/sql-reader/    
 Opera: https://addons.opera.com/en/extensions/details/sql-reader/    
-Webapp & PWA: https://webbrowsertools.com/sql-reader/  
+Webapp & PWA: https://webbrowsertools.com/sqlite-viewer/  
 
 --------------------------------------------------------------
 
