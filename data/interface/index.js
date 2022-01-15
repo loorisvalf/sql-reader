@@ -1,5 +1,4 @@
 var config = {
-  "resize": {"timeout": null},
   "addon": {
     "homepage": function () {
       return chrome.runtime.getManifest().homepage_url;
@@ -29,9 +28,51 @@ var config = {
       img.style.display = "none";
     }
   },
+  "resize": {
+    "timeout": null,
+    "method": function () {
+      if (config.port.name === "win") {
+        if (config.resize.timeout) window.clearTimeout(config.resize.timeout);
+        config.resize.timeout = window.setTimeout(async function () {
+          var current = await chrome.windows.getCurrent();
+          /*  */
+          config.storage.write("interface.size", {
+            "top": current.top,
+            "left": current.left,
+            "width": current.width,
+            "height": current.height
+          });
+        }, 1000);
+      }
+    }
+  },
+  "port": {
+    "name": '',
+    "connect": function () {
+      config.port.name = "webapp";
+      var context = document.documentElement.getAttribute("context");
+      /*  */
+      if (chrome.runtime) {
+        if (chrome.runtime.connect) {
+          if (context !== config.port.name) {
+            if (document.location.search === "?tab") config.port.name = "tab";
+            if (document.location.search === "?win") config.port.name = "win";
+            /*  */
+            chrome.runtime.connect({
+              "name": config.port.name
+            });
+          }
+        }
+      }
+      /*  */
+      document.documentElement.setAttribute("context", config.port.name);
+    }
+  },
   "storage": {
     "local": {},
-    "read": function (id) {return config.storage.local[id]},
+    "read": function (id) {
+      return config.storage.local[id];
+    },
     "load": function (callback) {
       chrome.storage.local.get(null, function (e) {
         config.storage.local = e;
@@ -51,6 +92,36 @@ var config = {
         }
       }
     }
+  },
+  "load": function () {
+    var print = document.getElementById("print");
+    var clear = document.getElementById("clear");
+    var reload = document.getElementById("reload");
+    var sample = document.getElementById("sample");
+    var support = document.getElementById("support");
+    var donation = document.getElementById("donation");
+    /*  */
+    support.addEventListener("click", function () {
+      if (config.port.name !== "webapp") {
+        var url = config.addon.homepage();
+        chrome.tabs.create({"url": url, "active": true});
+      }
+    }, false);
+    /*  */
+    donation.addEventListener("click", function () {
+      if (config.port.name !== "webapp") {
+        var url = config.addon.homepage() + "?reason=support";
+        chrome.tabs.create({"url": url, "active": true});
+      }
+    }, false);
+    /*  */
+    print.addEventListener("click", function () {window.print()});
+    clear.addEventListener("click", function () {config.app.clear()});
+    reload.addEventListener("click", function () {document.location.reload()});
+    sample.addEventListener("click", function () {config.sql.beautifier.setValue(config.sql.sample.code)});
+    /*  */
+    config.storage.load(config.app.start);
+    window.removeEventListener("load", config.load, false);
   },
   "create": {
     "table": function () {
@@ -180,7 +251,7 @@ var config = {
       config.app.worker.instance.postMessage({"id": "load", "action": "open"});
     },
     "worker": {
-      "instance": new Worker("vendor/sql/worker.sql-wasm.js"),
+      "instance": new Worker("vendor/sql/worker.sql-asm.js"),
       "listener": {
         "register": function () {
           config.app.worker.instance.onmessage = function (e) {
@@ -244,39 +315,7 @@ var config = {
   }
 };
 
-var load = function () {
-  var print = document.getElementById("print");
-  var clear = document.getElementById("clear");
-  var reload = document.getElementById("reload");
-  var sample = document.getElementById("sample");
-  var support = document.getElementById("support");
-  var donation = document.getElementById("donation");
-  /*  */
-  support.addEventListener("click", function () {
-    var url = config.addon.homepage();
-    chrome.tabs.create({"url": url, "active": true});
-  }, false);
-  /*  */
-  donation.addEventListener("click", function () {
-    var url = config.addon.homepage() + "?reason=support";
-    chrome.tabs.create({"url": url, "active": true});
-  }, false);
-  /*  */
-  print.addEventListener("click", function () {window.print()});
-  clear.addEventListener("click", function () {config.app.clear()});
-  reload.addEventListener("click", function () {document.location.reload()});
-  sample.addEventListener("click", function () {config.sql.beautifier.setValue(config.sql.sample.code)});
-  /*  */
-  config.app.start();
-  window.removeEventListener("load", load, false);
-};
+config.port.connect();
 
-window.addEventListener("resize", function () {
-  if (config.resize.timeout) window.clearTimeout(config.resize.timeout);
-  config.resize.timeout = window.setTimeout(function () {
-    config.storage.write("width", window.innerWidth || window.outerWidth);
-    config.storage.write("height", window.innerHeight || window.outerHeight);
-  }, 1000);
-}, false);
-
-window.addEventListener("load", load, false);
+window.addEventListener("load", config.load, false);
+window.addEventListener("resize", config.resize.method, false);

@@ -3,13 +3,16 @@
   <head>
     <meta charset="UTF-8">
     <title>SQLite Reader</title>
-    <link rel="stylesheet" href="index.css">
-    <link rel="stylesheet" href="vendor/codemirror/lib/codemirror.css">
+    <meta http-equiv="content-language" content="en">
+    <link type="text/css" rel="stylesheet" href="index.css">
+    <link type="text/css" rel="stylesheet" href="vendor/codemirror/lib/codemirror.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   </head>
   <body>
     <div class="container">
-      <div id="loader"><img src="resource/loader.gif"/></div>
+      <div id="loader">
+        <img src="resource/loader.gif"/>
+      </div>
       <div class="upload">
         <div class="description">I. File</div>
         <div id="fileinfo"></div>
@@ -44,7 +47,7 @@
       <div class="header">
         <button id="execute" class="button">Execute</button>
         <button id="clear" class="button">Clear interface</button>
-        <button id="sample" class="button">Sample database</button>
+        <button id="sample" class="button">Sample command</button>
         <button id="save" class="button">Save database to disk</button>
         <button id="print" class="button">Print rendered results</button>
       </div>

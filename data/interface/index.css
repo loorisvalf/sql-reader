@@ -4,21 +4,32 @@ html {
 }
 
 body {
-	border: 0;
-	margin: 0;
-	padding: 5px;
-	font-size: 12px;
-	overflow-y: scroll;
-	overflow-x: hidden;
-	width: calc(100% - 12px);
-	font-family: arial,sans-serif;
+  border: 0;
+  margin: 0;
+  width: 100%;
+  padding: 10px;
+  font-size: 12px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  font-family: arial,sans-serif;
 }
 
-.container textarea, .container .CodeMirror {
+.container .header {
+  display: flex;
+  flex-flow: row;
+	margin: 10px auto;
+  align-items: center;
+  justify-content: center;
+}
+
+.container textarea, 
+.container .CodeMirror {
 	margin: 0;
 	width: 100%;
 	height: 300px;
 	min-height: 300px;
+  line-height: 22px;
 	border: 1px solid rgba(0,0,0,0.2);
 }
 
@@ -30,41 +41,39 @@ body {
 }
 
 .container .button {
-	border: 0;
-	color: #FFF;
-	height: 38px;
-	margin: 1px 0;
-	outline: none;
-	padding: 0 5px;
-	cursor: pointer;
-	font-size: 12px;
-	overflow: hidden;
-	line-height: 34px;
-	text-align: center;
-	width: calc(85% /5);
-	white-space: nowrap;
-	display: inline-block;
-	vertical-align: middle;
-	text-overflow: ellipsis;
-	background-color: #5f9cdc;
-	font-family: arial,sans-serif;
+  border: 0;
+  color: #FFF;
+  height: 42px;
+  margin: 1px;
+  outline: none;
+  padding: 0 5px;
+  cursor: pointer;
+  font-size: 12px;
+  overflow: hidden;
+  line-height: 42px;
+  text-align: center;
+  white-space: nowrap;
+  width: calc(100% / 5);
+  display: inline-block;
+  vertical-align: middle;
+  text-overflow: ellipsis;
+  background-color: #5f9cdc;
+  font-family: arial,sans-serif;
 }
 
 .container .upload {
 	width: 100%;
-	height: 110px;
+	height: 128px;
 	display: block;
 	color: #616161;
 	margin: 0 auto;
 	font-size: 12px;
 	cursor: pointer;
 	background: #fff;
-	line-height: 110px;
 	text-align: center;
 	position: relative;
+	line-height: 128px;
 	border: solid 1px rgba(0,0,0,0.2);
-	background: #fff url('../icons/128.png') no-repeat 16px center;
-	background-size: 36px;
 }
 
 .container .upload .title {
@@ -78,17 +87,18 @@ body {
 	text-align: center;
 	white-space: nowrap;
 	pointer-events: none;
+  font-family: monospace;
 	text-overflow: ellipsis;
 }
 
 .container .upload .description {
-	top: 5px;
-	left: 5px;
-	margin: 0;
+  margin: 0;
+	left: 10px;
 	width: auto;
+	bottom: 5px;
 	height: 12px;
+	line-height: 0;
 	text-align: left;
-	line-height: 12px;
 	position: absolute;
 	pointer-events: none;
 }
@@ -99,22 +109,30 @@ body {
 	border: 0;
 	margin: 0;
 	outline: 0;
-	opacity: 0;
 	width: 100%;
 	color: #555;
 	height: 100%;
 	display: block;
 	cursor: pointer;
+  font-size: 12px;
 	position: absolute;
+  font-family: monospace;
 }
 
 .container .description {
-	color: #999;
-	margin: 10px 0;
-	font-size: 11px;
-	user-select: none;
-	text-transform: uppercase;
-	font-family: arial,sans-serif;
+  margin: 0;
+  width: 100%;
+  color: #999;
+  padding: 10px 0;
+  font-size: 11px;
+  font-weight: 600;
+  margin-top: 15px;
+  user-select: none;
+  letter-spacing: 1px;
+  box-sizing: border-box;
+  text-transform: uppercase;
+  font-family: arial,sans-serif;
+  border: solid 1px transparent;
 }
 
 .container .info {
@@ -122,43 +140,39 @@ body {
 	padding: 0;
 	width: 100%;
 	color: #777;
-	height: 32px;
+	height: 38px;
 	font-size: 12px;
 	cursor: default;
 	overflow: hidden;
 	user-select: none;
 	text-indent: 10px;
-	line-height: 32px;
+	line-height: 38px;
 	white-space: nowrap;
 	font-family: monospace;
 	text-overflow: ellipsis;
 	background: transparent;
 }
 
-.container .header {
-	margin: 5px auto;
-	text-align: center;
-}
-
 .container .toolbar {
-	top: 7px;
-	right: 7px;
+	top: 10px;
+	right: 8px;
 	z-index: 11;
 	position: absolute;
 }
 
 .container .toolbar table {
-  border-spacing: 0;
   table-layout: fixed;
+  border-spacing: 0 1px;
 }
 
 .container .toolbar table tr td {
   padding: 0;
-  width: 36px;
+  width: 42px;
   color: #777;
-  height: 36px;
+  height: 42px;
   font-size: 12px;
   cursor: pointer;
+  line-height: 42px;
   user-select: none;
   text-align: center;
   font-family: arial,sans-serif;
@@ -177,10 +191,10 @@ body {
 .container #execute {background-color: #41b945}
 
 .container #fileinfo {
-	left: 5px;
+	left: 55px;
 	padding: 0;
-	bottom: 5px;
 	width: auto;
+	bottom: 9px;
 	height: 12px;
 	color: #5f9cdc;
 	cursor: default;
@@ -193,20 +207,25 @@ body {
 }
 
 .container #loader {
-	left: 0;
-	top: 12px;
-	padding: 0;
-	width: 100%;
-	height: 18px;
-	margin: 0 auto;
-	position: fixed;
-	text-align: center;
-	background: transparent;
+  left: 0;
+  top: 113px;
+  padding: 0;
+  width: 100%;
+  z-index: 11;
+  height: 22px;
+  display: flex;
+  margin: 0 auto;
+  position: fixed;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
 }
 
 .container #loader img {
 	margin: 0;
 	width: 90px;
+  height: auto;
 	margin-left: auto;
 	margin-right: auto;
 	vertical-align: middle;
@@ -216,46 +235,48 @@ body {
 	padding: 0;
 	width: 100%;
 	margin: 0 auto;
-	background: #fff;
+	background-color: #fff;
+}
+
+.result pre {
+  margin: 0;
+  padding: 0;
+  color: #555;
+  overflow: auto;
+  font-size: 12px;
+  min-height: 42px;
+  box-shadow: none;
+  font-family: monospace;
+  border: 1px solid rgba(0,0,0,0.2);
 }
 
 .result table {
 	border: 0;
 	width: 100%;
 	margin: 0 auto;
+  font-size: 12px;
 	min-width: 300px;
-	margin-bottom: 5px;
-	border-spacing: 3px;
-	background-color: rgba(0,0,0,0.01);
+	border-spacing: 5px;
+  font-family: monospace;
+	background-color: #fff;
 }
 
 .result table th, .result table td {
-	color: #555;
-	padding: 5px;
+	color: #333;
+	padding: 10px;
 	font-size: 12px;
 	text-align: left;
+  box-shadow: none;
+  line-height: 18px;
+  background-color: #fff;
 	font-family: monospace;
 	border: 1px solid rgba(0,0,0,0.1);
-}
-
-.result pre {
-	margin: 0;
-	color: #555;
-	padding: 5px;
-	overflow: auto;
-	font-size: 12px;
-	min-height: 16px;
-	border: 1px solid rgba(0,0,0,0.2);
-}
-
-html[context="webapp"] .toolbar {
-  display: none;
 }
 
 @media print {
 	body {
 		padding: 0 !important;
-		width: 100% !important;
+		width: 100vw !important;
 	}
 	.container {
 		display: none !important;
@@ -269,24 +290,18 @@ html[context="webapp"] .toolbar {
 	}
 }
 
-@media (max-width: 800px) {
-	.container .button {
-		width: calc(100% /5 - 3px);
-	}
-}
-
 @media (max-width: 600px) {
-	.container .toolbar {
+	.container .title, .container .toolbar {
     display: none;
   }
-	.container .button {
+	.container .header {
+		flex-flow: column;
+	}
+  .container .header .button {
 		width: 100%;
-		height: 42px;
 	}
 }
 
-@media (max-width: 500px) {
-	.container .upload {
-		background: #fff;
-	}
+html[context="webapp"] .toolbar {
+  display: none;
 }
