@@ -1,10 +1,10 @@
 This app uses the following open-source projects:
 
-A) sqljs (asm version):
-  1) sql.js: https://github.com/sql-js/sql.js/releases/download/v1.6.2/sql.js
-  2) worker.sql-asm.js: https://github.com/sql-js/sql.js/releases/download/v1.6.2/worker.sql-asm.js
+A. sql.js (asm version)
+1) sql >> sql-asm.js: https://cdn.jsdelivr.net/npm/sql.js@1.10.3/dist/sql-asm.js
+2) sql >> worker.sql-asm.js: https://cdn.jsdelivr.net/npm/sql.js@1.10.3/dist/worker.sql-asm.js
 
-B) codemirror:
-  1) sql.js: https://codemirror.net/codemirror.zip > CodeMirror-5.56.0 > mode > sql > sql.js
-  2) codemirror.js: https://codemirror.net/codemirror.zip > CodeMirror-5.56.0 > lib > codemirror.js
-  3) codemirror.css: https://codemirror.net/codemirror.zip > CodeMirror-5.56.0 > lib > codemirror.css
+B. codemirror
+1) codemirror >> mode >> sql >> sql.js: https://cdn.jsdelivr.net/npm/codemirror@5.65.16/mode/sql/sql.js
+2) codemirror >> lib >> codemirror.js: https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.js
+3) codemirror >> lib >> codemirror.css: https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.css

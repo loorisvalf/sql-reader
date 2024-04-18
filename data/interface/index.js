@@ -12,19 +12,21 @@ var config = {
     },
     "toc": function (e, r) {
       config.loader.stop();
-      var total = Math.round(((performance.now() - config.time.start) / 1000) * 100) / 100 || "0.00";
-    	if (e) config.sql.info.textContent = config.sql.info.textContent + ' ' + e + (r ? ": " + total + "sec" : '');
+      const total = Math.round(((performance.now() - config.time.start) / 1000) * 100) / 100 || "0.00";
+    	if (e) {
+        config.sql.info.textContent = config.sql.info.textContent + ' ' + e + (r ? ": " + total + " sec" : '');
+      }
     }
   },
   "loader": {
     "start": function () {
-      var loader = document.getElementById("loader");
-      var img = loader.querySelector("img");
+      const loader = document.getElementById("loader");
+      const img = loader.querySelector("img");
       img.style.display = "initial";
     },
     "stop": function () {
-      var loader = document.getElementById("loader");
-      var img = loader.querySelector("img");
+      const loader = document.getElementById("loader");
+      const img = loader.querySelector("img");
       img.style.display = "none";
     }
   },
@@ -34,7 +36,7 @@ var config = {
       if (config.port.name === "win") {
         if (config.resize.timeout) window.clearTimeout(config.resize.timeout);
         config.resize.timeout = window.setTimeout(async function () {
-          var current = await chrome.windows.getCurrent();
+          const current = await chrome.windows.getCurrent();
           /*  */
           config.storage.write("interface.size", {
             "top": current.top,
@@ -50,7 +52,7 @@ var config = {
     "name": '',
     "connect": function () {
       config.port.name = "webapp";
-      var context = document.documentElement.getAttribute("context");
+      const context = document.documentElement.getAttribute("context");
       /*  */
       if (chrome.runtime) {
         if (chrome.runtime.connect) {
@@ -82,7 +84,7 @@ var config = {
     "write": function (id, data) {
       if (id) {
         if (data !== '' && data !== null && data !== undefined) {
-          var tmp = {};
+          let tmp = {};
           tmp[id] = data;
           config.storage.local[id] = data;
           chrome.storage.local.set(tmp, function () {});
@@ -94,23 +96,23 @@ var config = {
     }
   },
   "load": function () {
-    var print = document.getElementById("print");
-    var clear = document.getElementById("clear");
-    var reload = document.getElementById("reload");
-    var sample = document.getElementById("sample");
-    var support = document.getElementById("support");
-    var donation = document.getElementById("donation");
+    const print = document.getElementById("print");
+    const clear = document.getElementById("clear");
+    const reload = document.getElementById("reload");
+    const sample = document.getElementById("sample");
+    const support = document.getElementById("support");
+    const donation = document.getElementById("donation");
     /*  */
     support.addEventListener("click", function () {
       if (config.port.name !== "webapp") {
-        var url = config.addon.homepage();
+        const url = config.addon.homepage();
         chrome.tabs.create({"url": url, "active": true});
       }
     }, false);
     /*  */
     donation.addEventListener("click", function () {
       if (config.port.name !== "webapp") {
-        var url = config.addon.homepage() + "?reason=support";
+        const url = config.addon.homepage() + "?reason=support";
         chrome.tabs.create({"url": url, "active": true});
       }
     }, false);
@@ -120,15 +122,23 @@ var config = {
     reload.addEventListener("click", function () {document.location.reload()});
     sample.addEventListener("click", function () {config.sql.beautifier.setValue(config.sql.sample.code)});
     /*  */
+    document.addEventListener("scroll", function () {
+      if (window.scrollY) {
+        document.documentElement.setAttribute("scroll", '');
+      } else {
+        document.documentElement.removeAttribute("scroll");
+      }
+    });
+    /*  */
     config.storage.load(config.app.start);
     window.removeEventListener("load", config.load, false);
   },
   "create": {
     "table": function () {
-      var add = function (a, b, c) {
+      const _add = function (a, b, c) {
         if (a) {
           var parent = document.createElement(c);
-          for (var i = 0; i < a.length; i++) {
+          for (let i = 0; i < a.length; i++) {
             var tmp = document.createElement(b);
             tmp.textContent = a[i];
             parent.appendChild(tmp);
@@ -144,9 +154,12 @@ var config = {
       };
       /*  */
       return function (columns, values) {
-        var table  = document.createElement("table");
-        table.appendChild(add(columns, "th", "thead"));
-        for (var i = 0; i < values.length; i++) table.appendChild(add(values[i], "td", "tr"));
+        const table  = document.createElement("table");
+        table.appendChild(_add(columns, "th", "thead"));
+        for (let i = 0; i < values.length; i++) {
+          table.appendChild(_add(values[i], "td", "tr"));
+        }
+        /*  */
         return table;
       }
     }()
@@ -158,14 +171,19 @@ var config = {
     "run": document.getElementById("execute"),
     "dbfile": document.getElementById("dbfile"),
     "output": document.getElementById("output"),
-    "exec": function () {config.app.execute(config.sql.beautifier.getValue() + ';')},
+    "exec": function () {
+      config.app.execute(config.sql.beautifier.getValue() + ';');
+    },
     "size": function (s) {
       if (s) {
         if (s >= Math.pow(2, 30)) {return (s / Math.pow(2, 30)).toFixed(1) + "GB"};
         if (s >= Math.pow(2, 20)) {return (s / Math.pow(2, 20)).toFixed(1) + "MB"};
         if (s >= Math.pow(2, 10)) {return (s / Math.pow(2, 10)).toFixed(1) + "KB"};
+        /*  */
         return s + "B";
-      } else return '';
+      } else {
+        return '';
+      }
     },
     "beautifier": CodeMirror.fromTextArea(document.getElementById("commands"), {
       "autofocus": true,
@@ -178,7 +196,7 @@ var config = {
     }),
     "sample": {
       "code": `DROP TABLE IF EXISTS colleagues;
-  CREATE TABLE colleagues(id integer, name text, title text, manager integer, hired date, salary integer, commission float, dept integer);
+  CREATE TABLE colleagues(id integer, Name text, Title text, manager integer, Hired date, Salary integer, commission float, dept integer);
     INSERT INTO colleagues VALUES (1,'JOHNSON','ADMIN',6,'2011-12-17',18000,NULL,4);
     INSERT INTO colleagues VALUES (2,'HARDING','MANAGER',9,'2011-02-02',52000,300,3);
     INSERT INTO colleagues VALUES (3,'TAFT','SALES I',2,'2015-01-02',25000,500,3);
@@ -194,25 +212,33 @@ var config = {
     INSERT INTO colleagues VALUES (13,'MONROE','ENGINEER',10,'2017-12-03',30000,NULL,2);
     INSERT INTO colleagues VALUES (14,'ROOSEVELT','CPA',9,'2016-10-12',35000,NULL,1);
 
-  SELECT name, hired FROM colleagues ORDER BY hired ASC;
-  SELECT title, COUNT(*) AS count, (AVG(salary)) AS salary FROM colleagues GROUP BY title ORDER BY salary DESC;`
+  SELECT Name, Hired FROM colleagues ORDER BY Hired ASC;
+  SELECT Title, COUNT(*) AS Count, (AVG(Salary)) AS Salary FROM colleagues GROUP BY Title ORDER BY Salary DESC;`
     }
   },
   "app": {
-    "error": function (e) {config.time.toc(e.message, false)},
+    "error": function (e) {
+      config.time.toc(e.message, false);
+    },
     "savedb": function () {
     	config.time.tic();
     	config.app.worker.instance.postMessage({"id": "export", "action": "export"});
     },
     "execute": function (cmd) {
       config.time.tic();
+      document.documentElement.removeAttribute("result", '');
       config.sql.output.textContent = "Loading, please wait...";
-      config.app.worker.instance.postMessage({"id": "exec", "action": "exec", "sql": cmd});
+      /*  */
+      window.setTimeout(function () {
+        config.app.worker.instance.postMessage({"id": "exec", "action": "exec", "sql": cmd});
+      }, 300);
     },
     "clear": function () {
       config.time.tic();
       config.sql.info.textContent = '';
       config.sql.output.textContent = '';
+      document.documentElement.removeAttribute("result", '');
+      /*  */
       config.time.toc('', false);
     },
     "start": function () {
@@ -222,11 +248,11 @@ var config = {
       config.sql.run.addEventListener("click", config.sql.exec, true);
       config.sql.save.addEventListener("click", config.app.savedb, true);
       config.sql.dbfile.addEventListener("change", function (e) {
-        var reader = new FileReader();
+        const reader = new FileReader();
         reader.onload = function (e) {
           config.time.tic();
           config.sql.info.textContent = "Loading database, please wait...";
-          var buffer = e.target.result;
+          const buffer = e.target.result;
           if (buffer && buffer.byteLength) {
             config.sql.info.textContent = "The database is loaded successfully!";
             try {
@@ -240,7 +266,7 @@ var config = {
         }
         /*  */
         config.sql.file = e.target.files[0];
-        var fileinfo = document.getElementById("fileinfo");
+        const fileinfo = document.getElementById("fileinfo");
         fileinfo.textContent = config.sql.file.name + ' - ' + config.sql.size(config.sql.file.size);
         if (config.sql.file) {
           reader.readAsArrayBuffer(config.sql.file);
@@ -269,15 +295,18 @@ var config = {
               config.time.tic();
               config.sql.output.textContent = '';
               /*  */
-              var results = e.data.results;
+              const results = e.data.results;
+              const details = [...document.querySelectorAll("details")];
               if (results && results.length) {
                 config.sql.info.textContent = "Rendering results, please wait...";
-                for (var i = 0; i < results.length; i++) {
+                for (let i = 0; i < results.length; i++) {
                   config.sql.output.appendChild(config.create.table(results[i].columns, results[i].values));
                 }
                 /*  */
+                details[0].open = false;
                 config.sql.info.textContent = '';
                 config.time.toc("Result is ready, total", true);
+                document.documentElement.setAttribute("result", '');
               } else {
                 config.sql.info.textContent = "No result to show!";
                 config.time.toc("Please try a different database.", false);
@@ -286,10 +315,10 @@ var config = {
               config.time.tic();
               config.sql.info.textContent = "Exporting database, please wait...";
               /*  */
-              var arraybuffer = e.data.buffer;
+              const arraybuffer = e.data.buffer;
               if (arraybuffer && arraybuffer.byteLength) {              
-                var a = document.createElement('a');
-                var blob = new Blob([arraybuffer], {"type": "octet/stream"});
+                const a = document.createElement('a');
+                const blob = new Blob([arraybuffer], {"type": "octet/stream"});
                 /*  */
                 a.download = "db.sqlite";
                 a.href = window.URL.createObjectURL(blob);
