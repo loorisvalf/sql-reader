@@ -1,10 +1,12 @@
 This app uses the following open-source projects:
 
-A. sql.js (asm version)
-1) sql >> sql-asm.js: https://cdn.jsdelivr.net/npm/sql.js@1.10.3/dist/sql-asm.js
-2) sql >> worker.sql-asm.js: https://cdn.jsdelivr.net/npm/sql.js@1.10.3/dist/worker.sql-asm.js
+A. sql.js (wasm version)
+1) sql >> wasm >> sql-wasm.js: https://cdn.jsdelivr.net/npm/sql.js@1.13.3/dist/sql-wasm.js
+2) sql >> wasm >> sql-wasm.wasm: https://cdn.jsdelivr.net/npm/sql.js@1.13.3/dist/sql-wasm.wasm
+3) sql >> wasm >> worker.sql-wasm.js: https://cdn.jsdelivr.net/npm/sql.js@1.13.3/dist/worker.sql-wasm.js
 
 B. codemirror
-1) codemirror >> mode >> sql >> sql.js: https://cdn.jsdelivr.net/npm/codemirror@5.65.16/mode/sql/sql.js
-2) codemirror >> lib >> codemirror.js: https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.js
-3) codemirror >> lib >> codemirror.css: https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.css
+1) codemirror >> mode >> sql >> sql.js: https://cdn.jsdelivr.net/npm/codemirror@5.65.19/mode/sql/sql.js
+2) codemirror >> lib >> codemirror.js: https://cdn.jsdelivr.net/npm/codemirror@5.65.19/lib/codemirror.js
+3) codemirror >> lib >> codemirror.css: https://cdn.jsdelivr.net/npm/codemirror@5.65.19/lib/codemirror.css
+4) codemirror >> theme >> material-darker.css: https://cdn.jsdelivr.net/npm/codemirror@5.65.19/theme/material-darker.css

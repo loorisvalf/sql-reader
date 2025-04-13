@@ -51,7 +51,7 @@ html[scroll] .toolbar {
 }
 
 .toolbar table tr td svg {
-  fill: #333;
+  fill: #555;
   pointer-events: none;
   vertical-align: middle;
 }
@@ -277,8 +277,8 @@ html[scroll] .container .button {
 
 .result pre {
   margin: 0;
-  padding: 0;
   color: #333;
+  padding: 10px;
   overflow: auto;
   font-size: 13px;
   min-height: 42px;
@@ -296,6 +296,11 @@ html[scroll] .container .button {
 	border-spacing: 10px;
 	font-family: monospace;
 	background-color: #fff;
+	border: 1px solid rgba(0,0,0,0.25);
+}
+
+.result table:not(:first-child) {
+	margin-top: 10px;
 }
 
 .result table th, .result table td {
@@ -309,6 +314,10 @@ html[scroll] .container .button {
   background-color: #fff;
 	font-family: monospace;
 	border: 1px solid rgba(0,0,0,0.1);
+}
+
+.result table thead th {
+	background-color: rgba(0,0,0,0.05);
 }
 
 .result table td:nth-child(1) {
@@ -388,4 +397,54 @@ html[scroll] .container .button {
 
 html[context="webapp"] .toolbar {
   display: none;
+}
+
+html[theme='dark'], 
+html[theme='dark'] body {
+  color: #ebebeb;
+  color-scheme: dark;
+  background-color: #1e1e1e;
+}
+
+html[theme='dark'] .result,
+html[theme='dark'] .result table,
+html[theme='dark'] .result table th,
+html[theme='dark'] .result table td,
+html[theme='dark'] .container .upload {
+	background-color: #1e1e1e;
+}
+
+html[theme='dark'] .container .spacer {
+	background-color: rgb(255 255 255 / 25%);
+}
+
+html[theme='dark'] .result table thead th {
+	background-color: rgb(255 255 255 / 10%);
+}
+
+html[theme='dark'] .result pre,
+html[theme='dark'] .result table th,
+html[theme='dark'] .result table td,
+html[theme='dark'] .container .info,
+html[theme='dark'] .container .description,
+html[theme='dark'] .container .upload .title,
+html[theme='dark'] .container .upload input {
+	color: #ebebeb;
+}
+
+html[theme='dark'] .result pre,
+html[theme='dark'] .result table,
+html[theme='dark'] .container .upload,
+html[theme='dark'] .container textarea,
+html[theme='dark'] .container .CodeMirror {
+	border-color: rgb(255 255 255 / 25%);
+}
+
+html[theme='dark'] .result table td,
+html[theme='dark'] .result table th {
+	border-color: rgb(255 255 255 / 10%);
+}
+
+html[theme='dark'] .toolbar table tr td svg {
+	fill: #ebebeb;
 }

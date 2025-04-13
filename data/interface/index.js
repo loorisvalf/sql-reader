@@ -14,7 +14,7 @@ var config = {
       config.loader.stop();
       const total = Math.round(((performance.now() - config.time.start) / 1000) * 100) / 100 || "0.00";
     	if (e) {
-        config.sql.info.textContent = config.sql.info.textContent + ' ' + e + (r ? ": " + total + " sec" : '');
+        config.sql.info.textContent = e + (r ? ": " + total + " sec" : '');
       }
     }
   },
@@ -94,44 +94,6 @@ var config = {
         }
       }
     }
-  },
-  "load": function () {
-    const print = document.getElementById("print");
-    const clear = document.getElementById("clear");
-    const reload = document.getElementById("reload");
-    const sample = document.getElementById("sample");
-    const support = document.getElementById("support");
-    const donation = document.getElementById("donation");
-    /*  */
-    support.addEventListener("click", function () {
-      if (config.port.name !== "webapp") {
-        const url = config.addon.homepage();
-        chrome.tabs.create({"url": url, "active": true});
-      }
-    }, false);
-    /*  */
-    donation.addEventListener("click", function () {
-      if (config.port.name !== "webapp") {
-        const url = config.addon.homepage() + "?reason=support";
-        chrome.tabs.create({"url": url, "active": true});
-      }
-    }, false);
-    /*  */
-    print.addEventListener("click", function () {window.print()});
-    clear.addEventListener("click", function () {config.app.clear()});
-    reload.addEventListener("click", function () {document.location.reload()});
-    sample.addEventListener("click", function () {config.sql.beautifier.setValue(config.sql.sample.code)});
-    /*  */
-    document.addEventListener("scroll", function () {
-      if (window.scrollY) {
-        document.documentElement.setAttribute("scroll", '');
-      } else {
-        document.documentElement.removeAttribute("scroll");
-      }
-    });
-    /*  */
-    config.storage.load(config.app.start);
-    window.removeEventListener("load", config.load, false);
   },
   "create": {
     "table": function () {
@@ -216,13 +178,70 @@ var config = {
   SELECT Title, COUNT(*) AS Count, (AVG(Salary)) AS Salary FROM colleagues GROUP BY Title ORDER BY Salary DESC;`
     }
   },
+  "load": function () {
+    const print = document.getElementById("print");
+    const clear = document.getElementById("clear");
+    const theme = document.getElementById("theme");
+    const reload = document.getElementById("reload");
+    const sample = document.getElementById("sample");
+    const support = document.getElementById("support");
+    const donation = document.getElementById("donation");
+    /*  */
+    support.addEventListener("click", function () {
+      if (config.port.name !== "webapp") {
+        const url = config.addon.homepage();
+        chrome.tabs.create({"url": url, "active": true});
+      }
+    }, false);
+    /*  */
+    donation.addEventListener("click", function () {
+      if (config.port.name !== "webapp") {
+        const url = config.addon.homepage() + "?reason=support";
+        chrome.tabs.create({"url": url, "active": true});
+      }
+    }, false);
+    /*  */
+    theme.addEventListener("click", function () {
+      const attribute = document.documentElement.getAttribute("theme");
+      /*  */
+      config.app.theme = attribute === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("theme", config.app.theme);
+      config.sql.beautifier.setOption("theme", config.app.theme === "dark" ? "material-darker" : "default");
+      config.storage.write("theme", config.app.theme);
+    }, false);
+    /*  */
+    print.addEventListener("click", function () {window.print()});
+    clear.addEventListener("click", function () {config.app.clear()});
+    reload.addEventListener("click", function () {document.location.reload()});
+    sample.addEventListener("click", function () {config.sql.beautifier.setValue(config.sql.sample.code)});
+    /*  */
+    document.addEventListener("scroll", function () {
+      if (window.scrollY) {
+        document.documentElement.setAttribute("scroll", '');
+      } else {
+        document.documentElement.removeAttribute("scroll");
+      }
+    });
+    /*  */
+    config.storage.load(config.app.start);
+    window.removeEventListener("load", config.load, false);
+  },
   "app": {
+    "theme": "light",
     "error": function (e) {
       config.time.toc(e.message, false);
     },
     "savedb": function () {
     	config.time.tic();
     	config.app.worker.instance.postMessage({"id": "export", "action": "export"});
+    },
+    "clear": function () {
+      config.time.tic();
+      config.sql.info.textContent = '';
+      config.sql.output.textContent = '';
+      document.documentElement.removeAttribute("result", '');
+      /*  */
+      config.time.toc('', false);
     },
     "execute": function (cmd) {
       config.time.tic();
@@ -233,17 +252,10 @@ var config = {
         config.app.worker.instance.postMessage({"id": "exec", "action": "exec", "sql": cmd});
       }, 300);
     },
-    "clear": function () {
-      config.time.tic();
-      config.sql.info.textContent = '';
-      config.sql.output.textContent = '';
-      document.documentElement.removeAttribute("result", '');
-      /*  */
-      config.time.toc('', false);
-    },
     "start": function () {
       config.app.worker.listener.register();
       config.app.worker.instance.onerror = config.app.error;
+      config.app.theme = config.storage.read("theme") !== undefined ? config.storage.read("theme") : "light";
       /*  */
       config.sql.run.addEventListener("click", config.sql.exec, true);
       config.sql.save.addEventListener("click", config.app.savedb, true);
@@ -275,9 +287,11 @@ var config = {
       /*  */
       config.time.tic();
       config.app.worker.instance.postMessage({"id": "load", "action": "open"});
+      config.sql.beautifier.setOption("theme", config.app.theme === "dark" ? "material-darker" : "default");
+      document.documentElement.setAttribute("theme", config.app.theme !== undefined ? config.app.theme : "light");
     },
     "worker": {
-      "instance": new Worker("vendor/sql/worker.sql-asm.js"),
+      "instance": new Worker("vendor/sql/wasm/worker.sql-wasm.js"),
       "listener": {
         "register": function () {
           config.app.worker.instance.onmessage = function (e) {
@@ -290,7 +304,6 @@ var config = {
             } if ("error" in e.data) {
               config.time.toc("An unexpected error occurred", false);
               config.sql.output.textContent = e.data.error || "N/A";
-              config.sql.beautifier.setValue('');
             } else if (e.data.id === "exec") {
               config.time.tic();
               config.sql.output.textContent = '';
